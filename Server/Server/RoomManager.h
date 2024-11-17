@@ -52,7 +52,7 @@ public:
         std::cout << "End game for room: " << roomNum << std::endl;
 
         for (auto& other : clients) {
-            if (other._s_id == cl._s_id) continue;
+            //if (other._s_id == cl._s_id) continue;
 
             std::unique_lock<std::mutex> stateLock(other.state_lock);
             if (ST_INGAME != other._state) continue;
@@ -73,7 +73,7 @@ public:
     }
 
     bool IsValidRoomNumber(int roomNum) const {
-        return roomNum >= 0 && roomNum <= gameRooms.size();
+        return roomNum >= 0 && roomNum < gameRooms.size();
     }
 private:
     std::vector<Room> gameRooms;

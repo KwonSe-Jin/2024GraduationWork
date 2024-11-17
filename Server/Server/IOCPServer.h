@@ -9,14 +9,14 @@ public:
     virtual ~IOCPServer();
     void Initialize();
     void Run();
-
+    void Disconnect(int _s_id);
 
 private:
     void WorkerThread();
     void HandleAccept(Overlap* exp_over);
     void HandleReceive(int _s_id, Overlap* exp_over, DWORD num_byte);
     void HandleSend(int _s_id, Overlap* exp_over, DWORD num_byte);
-    void Disconnect(int _s_id);
+
     void ev_timer();
 
 private:

@@ -12,6 +12,7 @@ IOCPServer::~IOCPServer()
 	CloseHandle(g_h_iocp);
 	CloseHandle(g_timer); 
 	closesocket(server_socket);
+	WSACleanup();
 }
 
 void IOCPServer::Initialize()
@@ -45,6 +46,8 @@ void IOCPServer::Initialize()
 
     // 클라이언트 초기화
     for (int i = 0; i < MAX_USER; ++i) { clients[i]._s_id = i;}
+
+	PM = std::make_unique<PacketManager>();
 }
 
 

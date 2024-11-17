@@ -13,10 +13,10 @@
 
 HANDLE g_h_iocp;
 HANDLE g_timer;
-SOCKET sever_socket;
-condition_variable cv;
+//SOCKET sever_socket;
+//1condition_variable cv;
 LockQueue<timer_ev> timer_q;
-mutex mtx;
+//mutex mtx;
 
 
 

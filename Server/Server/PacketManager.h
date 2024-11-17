@@ -13,6 +13,7 @@ public:
 	void ProcessPacket(int s_id, unsigned char* p);
 	int get_id();
 private:
+	IOCPServer* server;
 	CLIENT* cl = nullptr;
 	int IdNum = 0;
 	unsigned char* RecvBuf = nullptr;;

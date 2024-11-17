@@ -37,7 +37,7 @@ void URoomListUi::SlotOnePress()
 	if (Inst && Inst->m_Socket->binLobby) {
 		//패킷 보낼 곳(id, game방 번호)
 		if (Inst->m_Socket)
-			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 1);
+			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 0);
 
 		RemoveFromParent();
 	}
@@ -52,7 +52,7 @@ void URoomListUi::SlotTwoPress()
 	if (Inst && Inst->m_Socket->binLobby) {
 		//패킷 보낼 곳(id, game방 번호)
 		if (Inst->m_Socket)
-			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 2);
+			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 1);
 
 		RemoveFromParent();
 	}
@@ -67,7 +67,7 @@ void URoomListUi::SlotThreePress()
 	if (Inst && Inst->m_Socket->binLobby) {
 		//패킷 보낼 곳(id, game방 번호)
 		if (Inst->m_Socket)
-			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 3);
+			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 2);
 
 		RemoveFromParent();
 	}
@@ -82,7 +82,7 @@ void URoomListUi::SlotFourPress()
 	if (Inst && Inst->m_Socket->binLobby) {
 		//패킷 보낼 곳(id, game방 번호)
 		if (Inst->m_Socket)
-			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 4);
+			Inst->m_Socket->Send_Lobby_Room_pakcet(Inst->GetPlayerID(), 3);
 
 		RemoveFromParent();
 	}
@@ -95,23 +95,23 @@ void URoomListUi::SlotFourPress()
 void URoomListUi::SlotOneHoverd()
 {
 	if (Inst)
-		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 1);
+		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 0);
 }
 
 void URoomListUi::SlotTwoHoverd()
 {
 	if (Inst)
-		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 2);
+		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 1);
 }
 
 void URoomListUi::SlotThreeHoverd()
 {
 	if (Inst)
-		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 3);
+		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 2);
 }
 
 void URoomListUi::SlotFourHoverd()
 {
 	if (Inst)
-		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 4);
+		Inst->m_Socket->Send_Hovered_packet(Inst->GetPlayerID(), 3);
 }

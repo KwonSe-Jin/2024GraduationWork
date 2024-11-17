@@ -470,9 +470,7 @@ void PacketManager::ProcessPacket(int s_id, unsigned char* p)
 			else other.state_lock.unlock();
 			if (other.currentRoom != cl.currentRoom)
 				continue;
-			other.currentRoom = -1;
 			CS_END_GAME_PACKET packet;
-
 			packet.id = cl._s_id;
 			packet.winnerid = cl._s_id;
 			packet.size = sizeof(packet);
@@ -481,6 +479,7 @@ void PacketManager::ProcessPacket(int s_id, unsigned char* p)
 			other.do_send(sizeof(packet), &packet);
 		}
 		//gameRooms[RoomNum].clear();
+		roomManager.EndGame(packet->id);
 		break;
 	}
 	case CS_GETITEM: {
@@ -899,6 +898,11 @@ void PacketManager::ProcessPacket(int s_id, unsigned char* p)
 			packet.bHitAnim = cl.bHitAnim;
 			other.do_send(sizeof(packet), &packet);
 		}
+		break;
+	}
+	case CS_LOGOUT: {
+		CS_LOGOUT_PACKET* packet = reinterpret_cast<CS_LOGOUT_PACKET*>(p);
+		server->Disconnect(packet->id);
 		break;
 	}
 	default:
