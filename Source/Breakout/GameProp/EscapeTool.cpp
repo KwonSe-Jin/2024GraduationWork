@@ -21,6 +21,7 @@ AEscapeTool::AEscapeTool()
 
 	AreaSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	bDetected = false;
+	//SetProcMesh();
 
 	////MeshA = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("/Game/Maps/MapAsset/oilDrum_2.oilDrum_2")).Object;
 	//ProcMeshUtillity->GetMeshDataFromStaticMesh(MeshA, DataA, 0, 0, false);
@@ -90,10 +91,6 @@ void AEscapeTool::BeginPlay()
 		AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AEscapeTool::OnSphereEndOverlap);
 	}
 	PercentBar->SetVisibility(false);
-
-	UE_LOG(LogTemp, Warning, TEXT("DATA A : %d"), DataA.Verts.Num());
-	UE_LOG(LogTemp, Warning, TEXT("DATA B : %d"), DataB.Verts.Num());
-	UE_LOG(LogTemp, Warning, TEXT("DATA Interp : %d"), InterpData.Verts.Num());
 
 	UpdatePercent(Cur);
 }
@@ -174,6 +171,10 @@ void AEscapeTool::SetProcMesh()
 	ProcMeshUtillity->UnifyTri(DataA);
 	ProcMeshUtillity->GetMeshDataFromStaticMesh(MeshB, DataB,0);
 	ProcMeshUtillity->UnifyTri(DataB);
+
+	if (DataB.Verts.Num() == 0 || DataA.Verts.Num() == 0)
+		return;
+
 	//부족하면 추가해주기
 	if (DataB.Verts.Num() > DataA.Verts.Num())
 	{
