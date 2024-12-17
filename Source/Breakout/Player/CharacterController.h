@@ -10,6 +10,7 @@
 #include "GameFramework/PlayerController.h"
 #include <memory>
 #include "Character/CharacterBase.h"
+#include "concurrent_queue.h"
 #include "CharacterController.generated.h"
 
 //ClientSocket* c_socket = nullptr;
@@ -141,11 +142,9 @@ public:
 	ACharacterController();
 	CPlayer initplayer;
 	// 다른 캐릭터들의 정보
-	std::queue<std::shared_ptr<CPlayer>> NewPlayer;
+	concurrency::concurrent_queue<std::shared_ptr<CPlayer>> NewPlayer;
 	std::queue<std::shared_ptr<CItem>> NewItem;
-	//int my_session_id;
-	//bool ProcessPacket(char* p);
-
+	
 	//virtual void OnPossess(APawn* InPawn) override;
 	void SetChName();
 	void SetNum();
@@ -171,9 +170,6 @@ public:
 	void ShowRespawnSelect();
 	void ShowMatchingUi();
 	// 초기 플레이어 저장
-	//void SetPlayerID(const int playerid) {
-	//	UE_LOG(LogTemp, Warning, TEXT("%d -> my_id"), playerid);
-	//	id = playerid; }
 	void SetPlayerInfo(CPlayerInfo* p_info) {
 		if (p_info != nullptr)
 			PlayerInfo = p_info;
@@ -187,8 +183,6 @@ public:
 	void UpdatePlayer();
 	//동기화 용
 	void UpdateSyncPlayer();
-	void UpdateSyncItem();
-	void SetHp(float DamagedHp);
 	void SetDestroyItemid(int itemid) { Escapeid = itemid; };
 	void SetMoppItemID(int moppID) { MoppID = moppID; };
 	bool UpdateWorld();
