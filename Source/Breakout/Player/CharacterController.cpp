@@ -110,7 +110,7 @@ void ACharacterController::BeginPlay()
 		}
 	}
 	// 패킷 주기 설정(interpolation)
-	const float Interval = 0.05f;
+	const float Interval = 0.1f;
 	GetWorld()->GetTimerManager().SetTimer(FMovePacketTimer, this,
 		&ACharacterController::UpdatePlayer, Interval, true);
 

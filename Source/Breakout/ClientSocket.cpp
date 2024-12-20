@@ -199,11 +199,13 @@ bool ClientSocket::PacketProcess(char* ptr)
 	}
 	case SC_ALL_READY: {
 		SC_ACCEPT_READY* packet = reinterpret_cast<SC_ACCEPT_READY*>(ptr);
+		//startgame
 		bAllReady = packet->ingame;
 		break;
 	}
 	case SC_TRAVLE: {
 		SC_TRAVEL_PACKET* packet = reinterpret_cast<SC_TRAVEL_PACKET*>(ptr);
+		//메인맵으로 이동
 		bTravel = packet->ingame;
 		break;
 	}
