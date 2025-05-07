@@ -92,32 +92,53 @@ void IOCPServer::WorkerThread()
 
 		switch (exp_over->_op) {
 		case IO_RECV: {
+			// 수신된 바이트 수가 0이면 연결 종료 신호로 판단
 			if (num_byte == 0) {
 				cout << "연결종료" << endl;
-				Disconnect(_s_id);
+				Disconnect(_s_id); // 클라이언트 연결 종료 처리
 				continue;
 			}
 			CLIENT& cl = clients[_s_id];
-			int remain_data = num_byte + cl._prev_size;
-			unsigned char* packet_start = exp_over->_net_buf;
-			int packet_size = packet_start[0];
+            // 수신된 데이터 + 이전에 잘려 저장된 데이터 크기 계산
+            int remain_data = num_byte + cl._prev_size;
 
-			while (packet_size <= remain_data) {
-				PM->ProcessPacket(_s_id, packet_start);
-				remain_data -= packet_size;
-				packet_start += packet_size;
-				if (remain_data > 0) packet_size = packet_start[0];
-				else break;
-			}
+            // 수신 시작 위치 수신 버퍼의 시작
+            unsigned char* packet_start = exp_over->_net_buf;
 
-			if (0 < remain_data) {
-				cl._prev_size = remain_data;
-				memcpy(&exp_over->_net_buf, packet_start, remain_data);
-			}
-			if (remain_data == 0)
-				cl._prev_size = 0;
-			cl.do_recv();
-			break;
+            //  패킷의 첫 바이트는 패킷 전체 길이
+            int packet_size = packet_start[0];
+
+            //  남은 데이터가 패킷 크기보다 크거나 같을 동안 계속 처리
+            while (packet_size <= remain_data) {
+                // 패킷 처리
+                PM->ProcessPacket(_s_id, packet_start);
+
+                // 처리한 패킷 길이만큼 감소
+                remain_data -= packet_size;
+
+                // 다음 패킷의 시작 위치로 이동
+                packet_start += packet_size;
+
+                // 남은 데이터가 있으면 다음 패킷 길이 확인
+                if (remain_data > 0)
+                    packet_size = packet_start[0];
+                else
+                    break;
+            }
+
+            //  패킷 하나만 오다가 잘렸거나, 여러 개 중 마지막 패킷이 잘린 경우
+            if (0 < remain_data) {
+                cl._prev_size = remain_data; // 남은 데이터 크기 저장
+                memcpy(&exp_over->_net_buf, packet_start, remain_data); // 잘린 데이터 앞쪽으로 복사
+            }
+
+            // 모든 데이터가 딱 떨어져 처리됐을 경우
+            if (remain_data == 0)
+                cl._prev_size = 0; // 이전 데이터 없음으로 초기화
+
+            //  다음 수신 등록 (비동기 RECV 재요청)
+            cl.do_recv();
+            break;
 		}
 		case IO_SEND: {
 			if (num_byte != exp_over->_wsa_buf.len) {
@@ -164,18 +185,6 @@ void IOCPServer::WorkerThread()
 		}
 		}
 	}
-}
-
-void IOCPServer::HandleAccept(Overlap* exp_over)
-{
-}
-
-void IOCPServer::HandleReceive(int _s_id, Overlap* exp_over, DWORD num_byte)
-{
-}
-
-void IOCPServer::HandleSend(int _s_id, Overlap* exp_over, DWORD num_byte)
-{
 }
 
 void IOCPServer::Disconnect(int _s_id)
